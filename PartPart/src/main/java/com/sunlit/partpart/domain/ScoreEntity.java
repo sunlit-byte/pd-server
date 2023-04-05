@@ -7,19 +7,13 @@ import lombok.Data;
 /**
  * @author Sunlit
  * @description
- * @date 2023-04-03 23:41
+ * @date 2023-04-04 21:14
  **/
 @Data
-@TableName("user")
-public class UserEntity extends BaseEntity {
+@TableName("score")
+public class ScoreEntity extends BaseEntity {
 
     private String userId;
 
-    private String userName;
-
-    private String imageId;
-
-    private String phone;
-
-    private String password;
+    private Integer score;
 }
