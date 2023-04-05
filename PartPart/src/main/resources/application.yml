@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: sunlit
+    password: sunlit
+    url: jdbc:mysql://124.220.15.118:3306/partpart?useSSL=false&serverTimezone=UTC&characterEncoding=utf-8
