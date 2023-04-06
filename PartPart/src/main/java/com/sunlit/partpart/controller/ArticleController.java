@@ -6,12 +6,14 @@ import com.sunlit.partpart.bean.ArticleInfoResp;
 import com.sunlit.partpart.bean.ArticleReq;
 import com.sunlit.partpart.bean.ArticleResp;
 import com.sunlit.partpart.service.ArticleService;
+import com.sunlit.partpart.utils.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -40,7 +42,10 @@ public class ArticleController {
     }
 
     @RequestMapping("/save")
-    public BaseResp save(@RequestBody ArticleReq articleReq){
+    public BaseResp save(@RequestBody ArticleReq articleReq) throws IOException {
+        if(StringUtils.isBlank(articleReq.getArticleName()) || StringUtils.isBlank(articleReq.getArticleContent())){
+            return BaseResp.fail("标题或者内容不能为空");
+        }
         articleService.addArticle(articleReq);
         return BaseResp.ok();
     }

@@ -12,7 +12,11 @@ public class ArticleReq {
 
     private String articleId;
 
+    private String userId;
+
     private String articleName;
 
     private String articleContent;
+
+    private String image;
 }

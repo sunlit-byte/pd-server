@@ -4,6 +4,7 @@ import com.sunlit.partpart.bean.ArticleInfoResp;
 import com.sunlit.partpart.bean.ArticleReq;
 import com.sunlit.partpart.bean.ArticleResp;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -28,5 +29,5 @@ public interface ArticleService {
      **/
     ArticleInfoResp getArticleInfoById(String articleId);
 
-    void addArticle(ArticleReq articleReq);
+    void addArticle(ArticleReq articleReq) throws IOException;
 }
