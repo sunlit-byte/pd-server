@@ -88,7 +88,7 @@ public class ArticleServiceImpl implements ArticleService {
         articleEntity.setArticleName(articleReq.getArticleName());
         articleEntity.setArticleIntroduce(articleReq.getArticleContent().substring(0,Math.min(15,articleReq.getArticleContent().length())));
         articleEntity.setArticleId(uuid);
-        articleEntity.setUserId(articleEntity.getUserId());
+        articleEntity.setUserId(articleReq.getUserId());
         articleInfoMapper.insert(articleInfoEntity);
         articleMapper.insert(articleEntity);
     }
