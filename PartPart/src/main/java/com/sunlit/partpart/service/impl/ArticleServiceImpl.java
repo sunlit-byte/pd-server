@@ -9,11 +9,14 @@ import com.sunlit.partpart.domain.ArticleInfoEntity;
 import com.sunlit.partpart.mapper.ArticleInfoMapper;
 import com.sunlit.partpart.mapper.ArticleMapper;
 import com.sunlit.partpart.service.ArticleService;
+import com.sunlit.partpart.service.ImageService;
+import com.sunlit.partpart.utils.StringUtils;
 import com.sunlit.partpart.utils.UUIDUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +32,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleMapper articleMapper;
 
     private final ArticleInfoMapper articleInfoMapper;
+
+    private final ImageService imageService;
 
 
     /**
@@ -65,16 +70,20 @@ public class ArticleServiceImpl implements ArticleService {
         return generateArticleInfoResp(articleInfoEntity);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public void addArticle(ArticleReq articleReq) {
+    public void addArticle(ArticleReq articleReq) throws IOException {
         String uuid = UUIDUtil.generateUUID();
         ArticleInfoEntity articleInfoEntity = new ArticleInfoEntity();
         articleInfoEntity.setArticleName(articleReq.getArticleName());
         articleInfoEntity.setArticleContent(articleReq.getArticleContent());
-        articleInfoEntity.setUserId(articleInfoEntity.getUserId());
-        articleInfoEntity.setImageId(null);
+        articleInfoEntity.setUserId(articleReq.getUserId());
+        articleInfoEntity.setImageId(uuid);
         articleInfoEntity.setArticleId(uuid);
+        //保存图片接口
+        if(StringUtils.isNotBlank(articleReq.getImage())){
+            imageService.saveImage(uuid,articleReq.getImage());
+        }
         ArticleEntity articleEntity = new ArticleEntity();
         articleEntity.setArticleName(articleReq.getArticleName());
         articleEntity.setArticleIntroduce(articleReq.getArticleContent().substring(0,Math.min(15,articleReq.getArticleContent().length())));
@@ -103,4 +112,6 @@ public class ArticleServiceImpl implements ArticleService {
         articleInfoResp.setImageId(null);
         return articleInfoResp;
     }
+
+    //
 }
