@@ -19,6 +19,6 @@ public class ArticleInfoResp {
 
     private String articleContent;
 
-    private String imageId;
+    private String image;
 
 }

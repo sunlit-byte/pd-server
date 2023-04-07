@@ -67,6 +67,11 @@ public class ArticleServiceImpl implements ArticleService {
         QueryWrapper<ArticleInfoEntity> wrapper = new QueryWrapper<>();
         wrapper.eq("article_id",articleId);
         ArticleInfoEntity articleInfoEntity = articleInfoMapper.selectOne(wrapper);
+        String image = null;
+        if(StringUtils.isNotBlank(articleInfoEntity.getImageId())){
+            image = imageService.loadImage(articleInfoEntity.getImageId());
+        }
+        articleInfoEntity.setImageId(image);
         return generateArticleInfoResp(articleInfoEntity);
     }
 
@@ -109,7 +114,7 @@ public class ArticleServiceImpl implements ArticleService {
         articleInfoResp.setArticleId(entity.getArticleId());
         articleInfoResp.setArticleContent(entity.getArticleContent());
         articleInfoResp.setArticleName(entity.getArticleName());
-        articleInfoResp.setImageId(null);
+        articleInfoResp.setImage(entity.getImageId());
         return articleInfoResp;
     }
 

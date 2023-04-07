@@ -17,4 +17,13 @@ public interface ImageService {
      * @param: image void
      **/
     void saveImage(String uuid, String image) throws IOException;
+
+    /**
+     * @return
+     * @description: 加载图片
+     * @author: Sunlit
+     * @date: 2023/4/7 15:19
+     * @param: articleId void
+     */
+    String loadImage(String imageId);
 }

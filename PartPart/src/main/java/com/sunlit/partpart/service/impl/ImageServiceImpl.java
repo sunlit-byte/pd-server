@@ -1,15 +1,15 @@
 package com.sunlit.partpart.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sunlit.partpart.domain.ImageEntity;
 import com.sunlit.partpart.mapper.ImageMapper;
 import com.sunlit.partpart.service.ImageService;
 import com.sunlit.partpart.utils.Base64Util;
+import com.sunlit.partpart.utils.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Paths;
 
 /**
@@ -38,6 +38,28 @@ public class ImageServiceImpl implements ImageService {
         return imagePath; // 返回图片文件的完整路径
     }
 
+    private byte[] loadImageFromFile(String imagePath){
+        File imageFile = new File(imagePath);
+        try (InputStream inputStream = new FileInputStream(imageFile)) {
+            // 获取图片文件的大小（字节数），用于创建字节数组
+            int fileSize = (int) imageFile.length();
+            byte[] imageData = new byte[fileSize];
+            // 读取图片文件的字节数据到字节数组中
+            int bytesRead = 0;
+            int offset = 0;
+            while (offset < fileSize && (bytesRead = inputStream.read(imageData, offset, fileSize - offset)) >= 0) {
+                offset += bytesRead;
+            }
+            return imageData;
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            System.out.println("获取图片数据错误");
+            throw new RuntimeException(e);
+        }
+
+    }
+
     /**
      * @param uuid
      * @param image
@@ -56,5 +78,29 @@ public class ImageServiceImpl implements ImageService {
         entity.setImageId(uuid);
         entity.setImage(imagePath);
         imageMapper.insert(entity);
+    }
+
+    /**
+     * @param
+     * @return
+     * @description: 加载图片
+     * @author: Sunlit
+     * @date: 2023/4/7 15:19
+     * @param: articleId void
+     */
+    @Override
+    public String loadImage(String imageId) {
+        //获取图片的地址
+        QueryWrapper<ImageEntity> wrapper = new QueryWrapper<>();
+        wrapper.eq("image_id",imageId);
+        ImageEntity entity = imageMapper.selectOne(wrapper);
+        if(entity == null || StringUtils.isBlank(entity.getImage())){
+            return null;
+        }
+        byte[] bytes = loadImageFromFile(entity.getImage());
+        if(bytes == null){
+            return null;
+        }
+        return Base64Util.encode(bytes);
     }
 }
