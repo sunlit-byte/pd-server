@@ -65,7 +65,7 @@ public class ScoreServiceImpl implements ScoreService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void operateScore(ScoreReq req) throws Exception {
+    public void operateScore(ScoreReq req) {
         //构造积分记录
         ScoreRecordEntity scoreRecordEntity = new ScoreRecordEntity();
         scoreRecordEntity.setUserId(req.getUserId());
@@ -80,7 +80,7 @@ public class ScoreServiceImpl implements ScoreService {
             }else if(req.getOperate() == OperateType.DOWN){
                 entity.setScore(entity.getScore() - req.getScore());
             }else {
-                throw new Exception("ss");
+                throw new RuntimeException("积分操作错误");
             }
             scoreMapper.update(entity,new QueryWrapper<ScoreEntity>().eq("user_id",entity.getUserId()));
         }else {

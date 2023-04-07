@@ -2,6 +2,7 @@ package com.sunlit.partpart.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.sunlit.partpart.base.BaseResp;
 import com.sunlit.partpart.bean.UserReq;
 import com.sunlit.partpart.domain.UserEntity;
 import com.sunlit.partpart.domain.UserTokenEntity;
@@ -42,8 +43,14 @@ public class UserServiceImpl implements UserService {
      * @param: req void
      */
     @Override
-    @Transactional
-    public void register(UserReq req) {
+    @Transactional(rollbackFor = Exception.class)
+    public BaseResp register(UserReq req) {
+
+        //判断用户是否已经登录
+        UserEntity user = userMapper.selectOne(new QueryWrapper<UserEntity>().eq("phone", req.getPhone()));
+        if(user != null){
+            BaseResp.fail("用户已注册");
+        }
         //在user表中添加信息
         //在token表中添加信息
         String userId = UUIDUtil.generateUUID();
@@ -61,6 +68,7 @@ public class UserServiceImpl implements UserService {
         userTokenEntity.setExpireTime(Date.from(expireTime.atZone(ZoneId.systemDefault()).toInstant()));
         userMapper.insert(userEntity);
         userTokenMapper.insert(userTokenEntity);
+        return BaseResp.ok();
     }
 
     /**

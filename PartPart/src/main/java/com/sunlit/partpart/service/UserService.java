@@ -1,5 +1,6 @@
 package com.sunlit.partpart.service;
 
+import com.sunlit.partpart.base.BaseResp;
 import com.sunlit.partpart.bean.UserReq;
 import com.sunlit.partpart.domain.UserEntity;
 
@@ -16,7 +17,7 @@ public interface UserService {
      * @date: 2023/4/4 0:01
      * @param: req void
      **/
-    void register(UserReq req);
+    BaseResp register(UserReq req);
 
     /**
      * @description: 修改名称 头像 密码；

@@ -25,8 +25,7 @@ public class UserController {
 
     @RequestMapping("/register")
     public BaseResp register(@RequestBody UserReq req){
-        userService.register(req);
-        return BaseResp.ok();
+        return userService.register(req);
     }
 
     @RequestMapping("/edit")

@@ -1,15 +1,16 @@
 package com.sunlit.partpart.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.sunlit.partpart.bean.ArticleInfoResp;
-import com.sunlit.partpart.bean.ArticleReq;
-import com.sunlit.partpart.bean.ArticleResp;
+import com.sunlit.partpart.bean.*;
+import com.sunlit.partpart.constants.OperateType;
+import com.sunlit.partpart.constants.ScoreType;
 import com.sunlit.partpart.domain.ArticleEntity;
 import com.sunlit.partpart.domain.ArticleInfoEntity;
 import com.sunlit.partpart.mapper.ArticleInfoMapper;
 import com.sunlit.partpart.mapper.ArticleMapper;
 import com.sunlit.partpart.service.ArticleService;
 import com.sunlit.partpart.service.ImageService;
+import com.sunlit.partpart.service.ScoreService;
 import com.sunlit.partpart.utils.StringUtils;
 import com.sunlit.partpart.utils.UUIDUtil;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleInfoMapper articleInfoMapper;
 
     private final ImageService imageService;
+
+    private final ScoreService scoreService;
 
 
     /**
@@ -96,6 +99,7 @@ public class ArticleServiceImpl implements ArticleService {
         articleEntity.setUserId(articleReq.getUserId());
         articleInfoMapper.insert(articleInfoEntity);
         articleMapper.insert(articleEntity);
+        scoreService.operateScore(generateScoreReq(articleReq.getUserId()));
     }
 
 
@@ -118,5 +122,13 @@ public class ArticleServiceImpl implements ArticleService {
         return articleInfoResp;
     }
 
-    //
+    //生成积分增加请求参数
+    private ScoreReq generateScoreReq(String userId){
+        ScoreReq scoreReq = new ScoreReq();
+        scoreReq.setScore(10);
+        scoreReq.setUserId(userId);
+        scoreReq.setOperate(OperateType.UP);
+        scoreReq.setType(ScoreType.ARTICLE);
+        return scoreReq;
+    }
 }

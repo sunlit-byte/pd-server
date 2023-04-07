@@ -25,5 +25,5 @@ public interface ScoreService {
      * @date: 2023/4/4 22:50
      * @param: req void
      **/
-    void operateScore(ScoreReq req) throws Exception;
+    void operateScore(ScoreReq req);
 }
