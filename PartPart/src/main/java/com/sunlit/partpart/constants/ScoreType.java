@@ -13,7 +13,8 @@ import lombok.Getter;
 public enum ScoreType {
 
     ARTICLE("ARTICLE","发布文章"),
-    GAME("GAME","游戏");
+    GAME("GAME","游戏"),
+    SEARCH("SEARCH","搜索");
 
 
 
